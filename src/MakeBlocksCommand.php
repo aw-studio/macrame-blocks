@@ -100,6 +100,8 @@ class MakeBlocksCommand extends Command
         );
 
         $this->addParserToContentCast();
+        $this->addRoutes();
+        
     }
 
     protected function addParserToContentCast()
@@ -115,6 +117,28 @@ class MakeBlocksCommand extends Command
 
         $this->files->put($path, $content);
     }
+
+    protected function addRoutes()
+    {
+        $path = base_path('routes/admin.php');
+        $content = $this->files->get($path);
+
+        // Add parser
+        $search = '});';
+        $replace = "
+    // blocks
+    Route::get('/blocks', [BlockController::class, 'index'])->name('blocks.index');
+    Route::post('/blocks', [BlockController::class, 'store'])->name('blocks.store');
+    Route::get('/blocks/items', [BlockController::class, 'items'])->name('blocks.items');
+    Route::get('/blocks/{block}', [BlockController::class, 'show'])->name('blocks.show');
+    Route::put('/blocks/{block}', [BlockController::class, 'update'])->name('blocks.update');
+});";
+        $content = Str::replaceFirst($search, $replace, $content);
+
+        $this->files->put($path, $content);
+    }
+
+   
     
     protected function makeResourceFiles()
     {
@@ -132,6 +156,9 @@ class MakeBlocksCommand extends Command
 
         $this->addBlocksToSections();
         $this->addBlocksToPages();
+        $this->addSidebarLink();
+        $this->addFormTypes();
+        $this->addResourceTypes();
     }
 
     protected function addBlocksToSections()
@@ -174,6 +201,70 @@ import";
         $replace = "import { SectionBlocks, DrawerBlocks } from '@admin/modules/blocks';
 import";
         $content = Str::replaceFirst($search, $replace, $content);
+
+        $this->files->put($path, $content);
+    }
+
+    protected function addSidebarLink()
+    {
+        $path = resource_path('admin/js/modules/sidebar-navigation/index.ts');
+        $content = $this->files->get($path);
+
+        // Add link
+        $search = '});';
+        $replace = '});
+
+// Navigation links
+sidebarLinks.push({
+    title: "Blöcke",
+    href: "/admin/blocks",
+    icon: IconBlocks,
+});';
+        $content = Str::replaceLast($search, $replace, $content);
+
+        // Add link
+        $search = 'import';
+        $replace = "import { IconBlocks } from '@macramejs/admin-vue3';
+import";
+        $content = Str::replaceLast($search, $replace, $content);
+
+        $this->files->put($path, $content);
+    }
+
+    protected function addFormTypes()
+    {
+        $path = resource_path('admin/js/types/forms.ts');
+        $content = $this->files->get($path);
+
+        $content .= '
+
+// Block
+
+export type BlockContent = {
+    name: string,
+    content: {[k:string]: any}[],
+}
+export type BlockContentForm = Form<BlockContent>;';
+
+        $this->files->put($path, $content);
+    }
+
+    protected function addResourceTypes()
+    {
+        $path = resource_path('admin/js/types/resources.ts');
+        $content = $this->files->get($path);
+
+        $content .= '
+
+// Block
+export type Block = {
+    id?: number;
+    content: { [key: string]: any };
+    name: string;
+};
+
+export type BlockResource = Resource<Block>;
+export type BlockCollectionResource = CollectionResource<Block>;';
 
         $this->files->put($path, $content);
     }
