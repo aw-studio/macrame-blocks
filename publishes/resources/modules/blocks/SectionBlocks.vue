@@ -7,7 +7,7 @@
             <Select
                 label="Block"
                 v-model="model.block"
-                :options="blocks.data"
+                :options="blocks.items"
                 label-key="name"
                 value-key="id"
             />
@@ -34,6 +34,9 @@ const props = defineProps({
 });
 
 const model = reactive(props.modelValue);
+
+blocks.perPage = 99999999;
+blocks.loadItems();
 
 watch(
     () => model,
