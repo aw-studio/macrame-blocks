@@ -165,7 +165,7 @@ class MakeBlocksCommand extends Command
 
     protected function addBlocksToSections()
     {
-        $path = resource_path('admin/js/modules/content/sections/index.ts');
+        $path = resource_path('admin/js/modules/content/index.ts');
         $content = $this->files->get($path);
 
         // Add to sections
