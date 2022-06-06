@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\PageContent;
+use App\Casts\ContentCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,7 +28,7 @@ class Block extends Model
      * @var array
      */
     protected $casts = [
-        'content' => PageContent::class,
+        'content' => ContentCast::class,
     ];
 
     /**
