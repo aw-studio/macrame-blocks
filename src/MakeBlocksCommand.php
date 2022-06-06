@@ -2,9 +2,9 @@
 
 namespace AwStudio\Blocks;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 
 class MakeBlocksCommand extends Command
 {
@@ -29,7 +29,7 @@ class MakeBlocksCommand extends Command
      */
     protected $files;
 
-     /**
+    /**
      * Create a new controller creator command instance.
      *
      * @param  Filesystem $files
@@ -50,7 +50,7 @@ class MakeBlocksCommand extends Command
     public function handle()
     {
         $this->makeAppFiles();
-        $this->makeResourcesFiles();
+        $this->makeResourceFiles();
 
         return 0;
     }
@@ -101,7 +101,6 @@ class MakeBlocksCommand extends Command
 
         $this->addParserToContentCast();
         $this->addRoutes();
-        
     }
 
     protected function addParserToContentCast()
@@ -136,10 +135,13 @@ class MakeBlocksCommand extends Command
         $content = Str::replaceFirst($search, $replace, $content);
 
         $this->files->put($path, $content);
+
+        $insert = "use Admin\Http\Controllers\BlockController;";
+        $before = "use Illuminate\Support\Facades\Route;";
+
+        $this->insertBefore($path, $insert, $before);
     }
 
-   
-    
     protected function makeResourceFiles()
     {
         // Modules
@@ -163,13 +165,13 @@ class MakeBlocksCommand extends Command
 
     protected function addBlocksToSections()
     {
-        $path = resource_path('admin/js/Pages/Page/components/content/sections/index.ts');
+        $path = resource_path('admin/js/modules/content/sections/index.ts');
         $content = $this->files->get($path);
 
         // Add to sections
         $search = 'const sections = {';
-        $replace = "const sections = {
-    block: SectionBlocks,";
+        $replace = 'const sections = {
+    block: SectionBlocks,';
         $content = Str::replaceFirst($search, $replace, $content);
 
         // Add import
@@ -183,7 +185,7 @@ import";
 
     protected function addBlocksToPages()
     {
-        $path = resource_path('admin/js/Pages/Page/components/PanelContentSidebar');
+        $path = resource_path('admin/js/Pages/Page/components/PanelContentSidebar.vue');
         $content = $this->files->get($path);
 
         // Add template
@@ -271,6 +273,21 @@ export type BlockCollectionResource = CollectionResource<Block>;';
 
     protected function publishPath($path)
     {
-        return __DIR__.'/../publiches/'.$path;
+        return __DIR__.'/../publishes/'.$path;
+    }
+
+    public function insertBefore(string $path, string $insert, string $before)
+    {
+        $content = $this->files->get($path);
+
+        if (str_contains($content, $insert)) {
+            return;
+        }
+
+        $content = Str::replaceFirst($before, $insert.PHP_EOL.$before, $content);
+
+        $this->files->put($path, $content);
+
+        $this->info("{$path} changed, please check it for correction and formatting.");
     }
 }
