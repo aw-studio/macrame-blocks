@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { Card, Section as BaseSection, Select } from '@macramejs/admin-vue3';
 import DrawerBlocks from './DrawerBlocks.vue';
-import { defineProps, watch, defineEmits, reactive } from 'vue';
+import { watch, reactive } from 'vue';
 
 import { blocks } from './index';
 
