@@ -1,8 +1,12 @@
 {
     "name": "aw-studio/macrame-blocks",
+    "description": "Reusable content-blocks for macrame apps.",
     "license": "MIT",
     "authors": [
-        "jannes@aw-studio.de"
+        {
+            "name": "Jannes Behrens",
+            "email": "jannes@aw-studio.de"
+        }
     ],
     "autoload": {
         "psr-4": {
