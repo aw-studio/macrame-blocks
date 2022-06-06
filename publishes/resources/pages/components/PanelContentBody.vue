@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import { Sections, ContentBody } from '@macramejs/admin-vue3';
-import { defineProps, PropType } from 'vue';
+import { PropType } from 'vue';
 import { sections } from '@admin/modules/content';
 import { Block } from '@admin/types/resources';
 import { BlockContentForm } from '@admin/types/forms';
