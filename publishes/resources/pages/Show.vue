@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, onBeforeUnmount, onBeforeMount } from 'vue';
+import { PropType, onBeforeUnmount, onBeforeMount } from 'vue';
 import { useForm } from '@macramejs/macrame-vue3';
 import { TabGroup, TabList, Tab, Content } from '@macramejs/admin-vue3';
 import { TabPanels, TabPanel } from '@headlessui/vue';
