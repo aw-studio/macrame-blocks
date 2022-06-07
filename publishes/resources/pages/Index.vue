@@ -3,12 +3,9 @@
         <template v-slot:sidebar-secondary>
             <SidebarSecondary>
                 <template v-slot:header>
-                    <div class="flex items-center justify-between w-full">
-                        <span class="inline-block text-xl font-medium">
-                            Blöcke
-                        </span>
+                    <SidebarSecondaryHeader title="Blöcke">
                         <AddBlockModal />
-                    </div>
+                    </SidebarSecondaryHeader>
                 </template>
                 <template v-slot:default>
                     <SidebarSecondarySection>
@@ -40,6 +37,7 @@ import {
     SidebarSecondary,
     SidebarLink,
     SidebarSecondarySection,
+    SidebarSecondaryHeader,
 } from '@macramejs/admin-vue3';
 import AddBlockModal from './components/AddBlockModal.vue';
 
